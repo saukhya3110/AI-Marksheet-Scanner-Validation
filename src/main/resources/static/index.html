@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Marksheet Scanner</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #172554;
+        }
+        header {
+            background: #123b70;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        main {
+            max-width: 760px;
+            margin: 35px auto;
+            padding: 24px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px #00000012;
+        }
+        h2 { color: #123b70; }
+        .upload {
+            border: 2px dashed #7c9bc4;
+            border-radius: 10px;
+            padding: 28px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        input { max-width: 100%; margin-top: 14px; }
+        button {
+            border: 0;
+            background: #1763ad;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+        button:hover { background: #0e477f; }
+        #status { margin-top: 18px; line-height: 1.6; }
+        footer { text-align: center; padding: 20px; color: #64748b; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AI Marksheet Scanner</h1>
+        <p>Scan, extract and validate academic results</p>
+    </header>
+
+    <main>
+        <h2>Upload Marksheet</h2>
+        <p>Select a marksheet image or PDF for processing.</p>
+
+        <form id="uploadForm">
+            <div class="upload">
+                <label for="file">Choose marksheet file</label><br>
+                <input id="file" name="file" type="file"
+                       accept="image/*,.pdf" required>
+            </div>
+            <button type="submit">Scan and Validate</button>
+        </form>
+
+        <div id="status" role="status">
+            Your scan results will appear here.
+        </div>
+    </main>
+
+    <footer>
+        AI-Based Marksheet Scanning and Validation System
+    </footer>
+
+    <script>
+        document.getElementById("uploadForm")
+            .addEventListener("submit", function (event) {
+                event.preventDefault();
+                const file = document.getElementById("file").files[0];
+                const status = document.getElementById("status");
+
+                if (!file) {
+                    status.textContent = "Please select a marksheet.";
+                    return;
+                }
+
+                status.textContent =
+                    "File selected: " + file.name +
+                    ". Connect the Java OCR backend to extract and validate marks.";
+            });
+    </script>
+</body>
+</html>
