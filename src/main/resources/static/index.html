@@ -78,21 +78,55 @@
     </footer>
 
     <script>
-        document.getElementById("uploadForm")
-            .addEventListener("submit", function (event) {
-                event.preventDefault();
-                const file = document.getElementById("file").files[0];
-                const status = document.getElementById("status");
+        
+<script>
+document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-                if (!file) {
-                    status.textContent = "Please select a marksheet.";
-                    return;
-                }
+    const fileInput = document.getElementById("file");
+    const status = document.getElementById("status");
 
-                status.textContent =
-                    "File selected: " + file.name +
-                    ". Connect the Java OCR backend to extract and validate marks.";
-            });
+    if (!fileInput.files.length) {
+        status.textContent = "Please select a marksheet image.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    status.textContent = "Uploading marksheet and scanning...";
+
+    try {
+        const response = await fetch("/api/marksheets/scan", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            status.textContent = result.error || "Scanning failed.";
+            return;
+        }
+
+        status.replaceChildren();
+
+        const heading = document.createElement("h3");
+        heading.textContent = "Extracted Marksheet Text";
+
+        const output = document.createElement("pre");
+        output.style.whiteSpace = "pre-wrap";
+        output.textContent = result.extractedText;
+
+        status.append(heading, output);
+
+    } catch (error) {
+        status.textContent =
+            "Unable to contact the backend. The Java application must be running.";
+    }
+});
+</script>
+
     </script>
 </body>
 </html>
